@@ -1,45 +1,38 @@
-/**
- * Contratos de domínio compartilhados do Weather App.
- *
- * Decisão de arquitetura: as temperaturas são sempre armazenadas em Celsius
- * internamente e convertidas apenas na camada de apresentação. Assim, a troca
- * de unidade (C/F) nunca dispara um novo request.
- */
-
 export type Unit = 'celsius' | 'fahrenheit';
 
-/** Resultado da API de geocoding (uma cidade). */
+export type WeatherCondition = 'sunny' | 'partly-cloudy' | 'cloudy' | 'rainy' | 'storm';
+
 export interface City {
   id: number;
   name: string;
   country: string;
-  /** Estado/região, quando disponível (ajuda a desambiguar homônimos). */
-  admin1?: string;
+  admin1: string | null;
   latitude: number;
   longitude: number;
 }
 
-/** Condições atuais. Temperatura sempre em °C. */
 export interface CurrentWeather {
-  temperature: number;
-  weatherCode: number;
-  humidity: number;
-  windSpeed: number;
-  pressure: number;
-  precipitation: number;
-  time: string;
+  temperature: number | null;
+  feelsLike: number | null;
+  condition: WeatherCondition;
+  description: string;
+  humidity: number | null;
+  windSpeed: number | null;
+  pressure: number | null;
+  precipitation: number | null;
+  updatedAt: string;
 }
 
-/** Um dia da previsão. Temperaturas sempre em °C. */
 export interface ForecastDay {
+  id: string;
+  label: string;
   date: string;
-  min: number;
-  max: number;
-  weatherCode: number;
-  precipitationProbability: number;
+  condition: WeatherCondition;
+  min: number | null;
+  max: number | null;
+  precipitationProbability: number | null;
 }
 
-/** Agregado entregue à UI: cidade + clima atual + 5 dias de previsão. */
 export interface WeatherData {
   city: City;
   current: CurrentWeather;

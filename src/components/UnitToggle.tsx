@@ -5,34 +5,33 @@ interface UnitToggleProps {
   onChange: (unit: Unit) => void;
 }
 
-/** Alternador de unidade Celsius/Fahrenheit, acessível por teclado. */
+const options: { label: string; value: Unit }[] = [
+  { label: '°C', value: 'celsius' },
+  { label: '°F', value: 'fahrenheit' },
+];
+
 export default function UnitToggle({ unit, onChange }: UnitToggleProps) {
   return (
     <div
-      role="group"
       aria-label="Unidade de temperatura"
-      className="inline-flex rounded-lg border border-white/10 bg-white/5 p-1 backdrop-blur-md"
+      className="inline-flex shrink-0 rounded-full border border-white/10 bg-slate-950/40 p-1"
+      role="group"
     >
-      <button
-        type="button"
-        aria-pressed={unit === 'celsius'}
-        onClick={() => onChange('celsius')}
-        className={`rounded-md px-3 py-1 text-sm font-semibold transition ${
-          unit === 'celsius' ? 'bg-accent-500 text-white' : 'text-white/60 hover:text-white'
-        }`}
-      >
-        °C
-      </button>
-      <button
-        type="button"
-        aria-pressed={unit === 'fahrenheit'}
-        onClick={() => onChange('fahrenheit')}
-        className={`rounded-md px-3 py-1 text-sm font-semibold transition ${
-          unit === 'fahrenheit' ? 'bg-accent-500 text-white' : 'text-white/60 hover:text-white'
-        }`}
-      >
-        °F
-      </button>
+      {options.map((option) => (
+        <button
+          key={option.value}
+          aria-pressed={unit === option.value}
+          className={`min-w-11 rounded-full px-3 py-2 text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-200 ${
+            unit === option.value
+              ? 'bg-white/15 text-white shadow-sm'
+              : 'text-slate-400 hover:text-white'
+          }`}
+          onClick={() => onChange(option.value)}
+          type="button"
+        >
+          {option.label}
+        </button>
+      ))}
     </div>
   );
 }

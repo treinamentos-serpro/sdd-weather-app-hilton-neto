@@ -1,30 +1,22 @@
-import { describe, it, expect } from 'vitest';
-import {
-  toFahrenheit,
-  convertTemperature,
-  formatTemperature,
-  unitLabel,
-} from '../../src/lib/temperature';
+import { describe, expect, it } from 'vitest';
+import { convertTemperature, formatTemperature } from '../../src/lib/temperature';
 
-describe('temperature', () => {
-  it('converte Celsius para Fahrenheit corretamente', () => {
-    expect(toFahrenheit(0)).toBe(32);
-    expect(toFahrenheit(100)).toBe(212);
-    expect(toFahrenheit(-40)).toBe(-40);
+describe('conversão de temperatura', () => {
+  it.each([
+    [0, 32],
+    [100, 212],
+    [-40, -40],
+  ])('converte %i°C para %i°F', (celsius, fahrenheit) => {
+    expect(convertTemperature(celsius, 'fahrenheit')).toBe(fahrenheit);
   });
 
-  it('convertTemperature respeita a unidade', () => {
-    expect(convertTemperature(20, 'celsius')).toBe(20);
-    expect(convertTemperature(0, 'fahrenheit')).toBe(32);
+  it('mantém Celsius sem conversão e arredonda para exibição', () => {
+    expect(convertTemperature(18.5, 'celsius')).toBe(18.5);
+    expect(formatTemperature(18.5, 'celsius')).toBe('19°C');
   });
 
-  it('formata com símbolo de grau e arredondamento', () => {
-    expect(formatTemperature(20.4, 'celsius')).toBe('20°');
-    expect(formatTemperature(0, 'fahrenheit')).toBe('32°');
-  });
-
-  it('retorna o rótulo da unidade', () => {
-    expect(unitLabel('celsius')).toBe('°C');
-    expect(unitLabel('fahrenheit')).toBe('°F');
+  it('representa temperatura ausente sem inventar um valor', () => {
+    expect(convertTemperature(null, 'fahrenheit')).toBeNull();
+    expect(formatTemperature(null, 'fahrenheit')).toBe('—');
   });
 });
